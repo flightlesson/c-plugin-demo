@@ -3,7 +3,7 @@
 
 #include "plugin.h"
 
-int doSomething() {
-  printf("did something\n");
+int pluginDoSomething(void *thisObj) {
+  printf("C did something\n");
   return 0;
 }

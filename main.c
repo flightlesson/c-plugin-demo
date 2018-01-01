@@ -11,7 +11,10 @@ void show_help_message() {
 int main(int argc, char **argv) {
 
   void *plugin;
-  int (*doSomething)();
+  void (*plugin_create)();
+  int (*plugin_doSomething)();
+  void (*plugin_destroy)();
+  void *pluginObj = 0;
   int rc;
   
   struct option options[] = {
@@ -66,14 +69,24 @@ int main(int argc, char **argv) {
     exit (1);
   }
 
-  doSomething = dlsym(plugin,"doSomething");
-  if (doSomething == NULL) {
+  plugin_create = dlsym(plugin,"pluginCreate");
+  if (plugin_create) {
+    pluginObj = (*plugin_create)();
+  }
+
+  plugin_doSomething = dlsym(plugin,"pluginDoSomething");
+  if (plugin_doSomething == NULL) {
     printf("Couldn't find doSomething() in %s: %s\n", arg_plugin, dlerror());
     exit (1);
   }
 
-  rc = (*doSomething)();
+  rc = (*plugin_doSomething)(pluginObj);
   printf("%s's doSomething() returned %d\n", arg_plugin, rc);
+
+  plugin_destroy = dlsym(plugin,"pluginDestroy");
+  if (plugin_destroy) {
+    (*plugin_destroy)(pluginObj);
+  }
 
 }
 
