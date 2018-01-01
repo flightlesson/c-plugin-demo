@@ -5,6 +5,12 @@
 extern "C" {
 #endif
 
+typedef struct Stuff {
+  int i;
+  double d;
+  char *name;
+} Stuff;
+
 /**
  * Optional, but if provided gets called before pluginDoSomething() or pluginDestroy() get called.
  * With C plugins can return anything;
@@ -19,7 +25,7 @@ void *pluginCreate();
  * @param thisObject what pluginCreate() returned.
  * @return 0 indicates success; anything else indicates failure
  */
-int pluginDoSomething(void *thisObject);
+int pluginDoSomething(void *thisObject, Stuff *stuff);
 
 /**
  * @param thisObject what pluginCreate() returned.

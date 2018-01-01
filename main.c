@@ -4,6 +4,8 @@
 
 #include <getopt.h> /* provides getopt_long() */
 
+#include "plugin.h"
+
 void show_help_message() {
   printf("help message\n");
 }
@@ -16,6 +18,7 @@ int main(int argc, char **argv) {
   void (*plugin_destroy)();
   void *pluginObj = 0;
   int rc;
+  struct Stuff stuff;
   
   struct option options[] = {
     {"version", no_argument ,      NULL, 'V'},
@@ -80,7 +83,11 @@ int main(int argc, char **argv) {
     exit (1);
   }
 
-  rc = (*plugin_doSomething)(pluginObj);
+  stuff.i = 42;
+  stuff.d = 3.14;
+  stuff.name = "Stuff!";
+
+  rc = (*plugin_doSomething)(pluginObj,&stuff);
   printf("%s's pluginDoSomething() returned %d\n", arg_plugin, rc);
 
   plugin_destroy = dlsym(plugin,"pluginDestroy");
