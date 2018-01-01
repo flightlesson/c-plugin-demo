@@ -11,7 +11,7 @@ void show_help_message() {
 int main(int argc, char **argv) {
 
   void *plugin;
-  void (*plugin_create)();
+  void *(*plugin_create)();
   int (*plugin_doSomething)();
   void (*plugin_destroy)();
   void *pluginObj = 0;
@@ -76,12 +76,12 @@ int main(int argc, char **argv) {
 
   plugin_doSomething = dlsym(plugin,"pluginDoSomething");
   if (plugin_doSomething == NULL) {
-    printf("Couldn't find doSomething() in %s: %s\n", arg_plugin, dlerror());
+    printf("Couldn't find pluginDoSomething() in %s: %s\n", arg_plugin, dlerror());
     exit (1);
   }
 
   rc = (*plugin_doSomething)(pluginObj);
-  printf("%s's doSomething() returned %d\n", arg_plugin, rc);
+  printf("%s's pluginDoSomething() returned %d\n", arg_plugin, rc);
 
   plugin_destroy = dlsym(plugin,"pluginDestroy");
   if (plugin_destroy) {
